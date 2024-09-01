@@ -38,7 +38,7 @@ describe 'ActiveRecord Obstacle Course, Week 2' do
 
     # ------------------ Using ActiveRecord ----------------------
     # Solution goes here
-    orders = Order.where
+    orders = Order.all.order(amount: :desc)
     # ------------------------------------------------------------
 
     # Expectation
