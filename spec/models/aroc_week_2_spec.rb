@@ -1,27 +1,26 @@
 require 'rails_helper'
 
 describe 'ActiveRecord Obstacle Course, Week 2' do
+  # Looking for your test setup data?
+  # It's currently inside /spec/rails_helper.rb
+  # Not a very elegant solution, but works for this iteration.
 
-# Looking for your test setup data?
-# It's currently inside /spec/rails_helper.rb
-# Not a very elegant solution, but works for this iteration.
+  # Here are the docs associated with ActiveRecord queries: http://guides.rubyonrails.org/active_record_querying.html
 
-# Here are the docs associated with ActiveRecord queries: http://guides.rubyonrails.org/active_record_querying.html
-
-# ----------------------
-
+  # ----------------------
 
   it '9. finds orders for a user' do
     expected_result = [@order_3, @order_15, @order_9, @order_12]
 
     # ----------------------- Using Ruby -------------------------
-    orders_of_user_3 = Order.all.select { |order| order.user_id == @user_3.id }
+    # orders_of_user_3 = Order.all.select { |order| order.user_id == @user_3.id }
     # ------------------------------------------------------------
 
     # ------------------ Using ActiveRecord ----------------------
     # Solution goes here
+    orders_of_user_3 = Order.where(user_id: @user_3.id)
     # ------------------------------------------------------------
-
+    #
     # Expectation
     expect(orders_of_user_3).to eq(expected_result)
   end
@@ -34,11 +33,12 @@ describe 'ActiveRecord Obstacle Course, Week 2' do
     ]
 
     # ----------------------- Using Ruby -------------------------
-    orders = Order.all.sort_by { |order| order.amount }.reverse
+    # orders = Order.all.sort_by { |order| order.amount }.reverse
     # ------------------------------------------------------------
 
     # ------------------ Using ActiveRecord ----------------------
     # Solution goes here
+    orders = Order.where
     # ------------------------------------------------------------
 
     # Expectation
@@ -100,7 +100,8 @@ describe 'ActiveRecord Obstacle Course, Week 2' do
   end
 
   it '14. plucks all values from one column' do
-    expected_result = ['Abercrombie', 'Banana Republic', 'Calvin Klein', 'Dickies', 'Eddie Bauer', 'Fox', 'Giorgio Armani', 'Hurley', 'Izod', 'J.crew']
+    expected_result = ['Abercrombie', 'Banana Republic', 'Calvin Klein', 'Dickies', 'Eddie Bauer', 'Fox',
+                       'Giorgio Armani', 'Hurley', 'Izod', 'J.crew']
 
     # ----------------------- Using Ruby -------------------------
     names = Item.all.map(&:name)
@@ -130,16 +131,14 @@ describe 'ActiveRecord Obstacle Course, Week 2' do
       'Giorgio Armani', 'Banana Republic', 'Izod', 'Fox',
       'Giorgio Armani', 'Eddie Bauer', 'Izod', 'Calvin Klein',
       'Abercrombie', 'Eddie Bauer', 'J.crew', 'Calvin Klein',
-      'Abercrombie', 'Giorgio Armani', 'J.crew', 'Fox',
+      'Abercrombie', 'Giorgio Armani', 'J.crew', 'Fox'
     ]
 
     # ----------------------- Using Ruby -------------------------
     names = Order.all.map do |order|
-      if order.items
-        order.items.map { |item| item.name }
-      end
+      order.items.map { |item| item.name } if order.items
     end
-    
+
     names = names.flatten
     # ------------------------------------------------------------
 
